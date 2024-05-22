@@ -1,0 +1,27 @@
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.btn-reset {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90px;
+  height: 50px;
+  border-radius: 10px;
+  border: 2px solid #36b5ff;
+  background: none;
+  cursor: pointer;
+  color: #36b5ff;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.btn-reset:hover {
+  background-color: #19446d;
+  color: #fff;
+  border: none;
+}
