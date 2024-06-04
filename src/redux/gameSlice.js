@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   data: ["", "", "", "", "", "", "", "", ""],
   count: 0,
+  showModal: false,
 };
 
 export const gameSlice = createSlice({
