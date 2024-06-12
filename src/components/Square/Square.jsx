@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { setGame } from "../../redux/gameSlice";
+import { setGame, setLock, setModal } from "../../redux/gameSlice";
 import PropTypes from "prop-types";
 import circle from "../../assets/circle.svg";
 import cross from "../../assets/cross.svg";
@@ -7,7 +7,26 @@ import "./Square.css";
 
 const Square = ({ index }) => {
   const dispatch = useDispatch();
-  let { data, count } = useSelector((state) => state.game);
+  let { data, count, lock, playerWin } = useSelector((state) => state.game);
+
+  function computerTurn(boardData) {
+    const indices = [];
+
+    boardData.forEach((value, index) => {
+      if (value === "") {
+        indices.push(index);
+      }
+    });
+
+    const randomIndex = indices[Math.floor(Math.random() * indices.length)];
+
+    let newData = Array.from(boardData);
+    newData[randomIndex] = "x";
+    ++count;
+
+    playerWin = validateWinner(newData);
+    dispatch(setGame({ data: newData, count, lock, playerWin }));
+  }
 
   function validateWinner(squares) {
     const winnerCombinations = [
@@ -28,28 +47,48 @@ const Square = ({ index }) => {
         squares[a] === squares[b] &&
         squares[a] === squares[c]
       ) {
+        lock = true;
+        setTimeout(() => {
+          dispatch(setModal());
+        }, 3000);
         return squares[a];
       }
     }
     return null;
   }
 
-  const handleClick = (e) => {
+  const handleClick = () => {
     let newData = Array.from(data);
-    if (count % 2 === 0) {
-      e.target.innerHTML = `<img src='${circle}' alt="circle" />`;
+    if (newData[index] === "" && !lock) {
       newData[index] = "o";
-    } else {
-      e.target.innerHTML = `<img src='${cross}' alt="cross" />`;
-      newData[index] = "x";
-    }
-    ++count;
-    dispatch(setGame({ data: newData, count }));
+      ++count;
 
-    validateWinner(newData);
+      playerWin = validateWinner(newData);
+      dispatch(setGame({ data: newData, count, lock, playerWin }));
+
+      if (newData.includes("") && !lock) {
+        computerTurn(newData);
+      } else {
+        lock = true;
+        dispatch(setLock());
+        setTimeout(() => {
+          dispatch(setModal());
+        }, 3000);
+      }
+    }
   };
 
-  return <div className="square" onClick={handleClick}></div>;
+  return (
+    <div className="square" onClick={handleClick}>
+      {data[index] === "o" ? (
+        <img src={circle} alt="circle" />
+      ) : data[index] === "x" ? (
+        <img src={cross} alt="cross" />
+      ) : (
+        ""
+      )}
+    </div>
+  );
 };
 
 Square.propTypes = {

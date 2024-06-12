@@ -1,12 +1,8 @@
+import RegisterForm from "../RegisterForm/RegisterForm";
 import PropTypes from "prop-types";
 import "./Modal.css";
-import RegisterForm from "../RegisterForm/RegisterForm";
 
-const Modal = ({ show = false }) => {
-  if (!show) {
-    return null;
-  }
-
+const Modal = () => {
   return (
     <div className="modal">
       <div className="modal-container">
