@@ -7,7 +7,6 @@ const ScientistTable = () => {
   useEffect(() => {
     const fetchScientists = () => {
       setScientists(JSON.parse(localStorage.getItem("users")));
-      console.log(setScientists);
     };
     fetchScientists();
   }, []);
